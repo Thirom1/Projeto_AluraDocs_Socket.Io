@@ -22,4 +22,5 @@ campoTexto.addEventListener('keyup', () => {
     })
 })
 
+
 export { atualizaTextoEditor }
