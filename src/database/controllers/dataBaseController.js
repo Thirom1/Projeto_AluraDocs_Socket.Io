@@ -32,6 +32,14 @@ class dataBaseController {
          return novoDocumento
 
     }
+
+    static excluirDocumento(nome) {
+        const resultado = colection.deleteOne({
+          nome,
+        });
+      
+        return resultado;
+      }
 }
 
 

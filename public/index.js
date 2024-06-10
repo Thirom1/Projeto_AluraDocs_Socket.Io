@@ -21,5 +21,11 @@ function adicionaDocumento(nomeDocumento) {
   </a>`
 }
 
+function removerLinkDocumento(nomeDocumento) {
+  const documento = document.getElementById(`documento-${nomeDocumento}`);
 
-export { adicionaDocumento }
+  listaDocumentos.removeChild(documento);
+}
+
+
+export { adicionaDocumento, removerLinkDocumento }
