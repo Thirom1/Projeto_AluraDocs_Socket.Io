@@ -1,24 +1,25 @@
-import './socket-front-index.js'
-import { emitirAdicaoDocumento } from './socket-front-index.js'
+import { emitirAdicionarDocumento } from "./socket-front-index.js";
 
+const listaDocumentos = document.getElementById("lista-documentos");
+const form = document.getElementById("form-adiciona-documento");
+const inputDocumento = document.getElementById("input-documento");
 
+form.addEventListener("submit", (evento) => {
+  evento.preventDefault();
+  emitirAdicionarDocumento(inputDocumento.value);
+  inputDocumento.value = "";
+});
 
-const listaDocumentos = document.getElementById('lista-documentos')
-const campoAddDocumento = document.getElementById('form-adiciona-documento')
-const imputDocumento = document.getElementById('input-documento')
-
-campoAddDocumento.addEventListener('submit', (evento) => {
-      evento.preventDefault()
-      emitirAdicaoDocumento(imputDocumento.value)
-      imputDocumento.value = "";
-      
-})
-
-
-function adicionaDocumento(nomeDocumento) {
-    listaDocumentos.innerHTML += `<a href="documento.html?nome=${nomeDocumento}" class="list-group-item list-group-item-action">
-    ${nomeDocumento}
-  </a>`
+function inserirLinkDocumento(nomeDocumento) {
+  listaDocumentos.innerHTML += `
+    <a
+      href="/documento/index.html?nome=${nomeDocumento}"
+      class="list-group-item list-group-item-action"
+      id="documento-${nomeDocumento}"
+    >
+      ${nomeDocumento}
+    </a>
+  `;
 }
 
 function removerLinkDocumento(nomeDocumento) {
@@ -27,5 +28,4 @@ function removerLinkDocumento(nomeDocumento) {
   listaDocumentos.removeChild(documento);
 }
 
-
-export { adicionaDocumento, removerLinkDocumento }
+export { inserirLinkDocumento, removerLinkDocumento };

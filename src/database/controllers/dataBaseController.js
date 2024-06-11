@@ -3,14 +3,14 @@ import { colection } from "../conectDataBase.js";
 class dataBaseController {
     constructor() {}
 
-    static encontrarDocumento(nome) {
+     encontrarDocumento(nome) {
         const documento = colection.findOne({
           nome
         })
          return documento;
       }
 
-    static atualizaDocumento(nome, texto) {
+     atualizaDocumento(nome, texto) {
         const atualizaçao = colection.updateOne(
             { nome: nome },
             { $set: { texto: texto } }
@@ -19,12 +19,12 @@ class dataBaseController {
         return atualizaçao
     }
 
-    static obterDocumentos() {
+     obterDocumentos() {
         const documentos = colection.find().toArray()
         return documentos
     }
 
-    static adicionaDocumento(nome) {
+     adicionaDocumento(nome) {
         const novoDocumento = colection.insertOne( {
             nome: `${nome}`,
             texto: `texto de ${nome} do mongoDB`
@@ -33,7 +33,7 @@ class dataBaseController {
 
     }
 
-    static excluirDocumento(nome) {
+     excluirDocumento(nome) {
         const resultado = colection.deleteOne({
           nome,
         });
