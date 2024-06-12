@@ -1,4 +1,6 @@
 import { colection } from "../conectDataBase.js";
+import { usuarioColection } from "../conectDataBase.js";
+import Utils from "../../utils/Utils.js";
 
 class dataBaseController {
     constructor() {}
@@ -40,6 +42,16 @@ class dataBaseController {
       
         return resultado;
       }
+    
+    cadastrarUsuario({ usuario, senha }){
+      const { hashSenha, salSenha } = Utils.criaHashESalSenha(senha);
+      
+      return usuarioColection.insertOne({ usuario, hashSenha, salSenha })
+    }
+
+    encontrarUsuario(usuario) {
+      return usuarioColection.findOne({ usuario })
+    }
 }
 
 

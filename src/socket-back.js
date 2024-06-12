@@ -9,6 +9,7 @@ io.on('connection', (socket) => {
     
     socketController.eventosInicio(io)
     socketController.eventosDocumento(io)
+    socketController.eventosCadastro(io)
 
 })
 

@@ -62,6 +62,25 @@ class SocketController extends dataBaseController {
           }
         });
     }
+
+    eventosCadastro(io) {
+      this.socket.on('cadastrar_usuario', async (dados) => {
+        const usuario = await this.encontrarUsuario(dados.usuario)
+
+      if (usuario === null) {
+        const resultado = await this.cadastrarUsuario(dados)
+  
+        if (resultado.acknowledged) {
+          this.socket.emit('cadastro_sucesso')
+        } else {
+          this.socket.emit('cadastro_erro')
+        }
+      } else {
+        this.socket.emit('usuario_existente')
+      }
+        
+        })
+    }
 }
 
 
