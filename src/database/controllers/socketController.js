@@ -1,3 +1,4 @@
+import Utils from "../../utils/Utils.js";
 import dataBaseController from "./dataBaseController.js";
 
 
@@ -29,26 +30,38 @@ class SocketController extends dataBaseController {
               }
              })
         
-            this.socket.on("selecionar-documento", async (nomeDocumento) => {
-              this.socket.join(nomeDocumento)
-              
-              const documento = await this.encontrarDocumento(nomeDocumento);
-        
-              
-                
-                if (documento) {
-                  this.socket.emit('texto_documento', documento.texto)
-                }
-                
-            })
-
+            
     }
 
     eventosDocumento(io) {
+
+      this.socket.on("selecionar_documento", async ({nomeDocumento , usuario}, devolverTexto) => {
         
-        this.socket.on('texto_editor', async ({nomeDocumento, texto}) => {
+        this.socket.join(nomeDocumento)
+        
+        const documento = await this.encontrarDocumento(nomeDocumento);
+  
+        
+          
+          if (documento) {
+
+            Utils.addConexaoALista({nomeDocumento, usuario})
+
+            const usuariosNoDocumento = Utils.obterUsuariosDocumento(nomeDocumento)
+
+            io.to(nomeDocumento).emit('usuarios_no_documento', usuariosNoDocumento)
+
+            devolverTexto(documento.texto)
+            
+          }
+          
+      })
+
+        
+        this.socket.on('texto_editor', async ({ nomeDocumento, texto }) => {
             const atualiza = await this.atualizaDocumento(nomeDocumento, texto)
            
+            
             if (atualiza.modifiedCount){
               this.socket.to(nomeDocumento).emit('texto_editor_clientes', texto)
             } 
@@ -80,6 +93,34 @@ class SocketController extends dataBaseController {
       }
         
         })
+    }
+
+    eventosLogin(io) {
+      this.socket.on('autenticar_usuario', async ({usuario, senha}) => {
+        const nome = await this.encontrarUsuario(usuario)
+
+        if (nome) {
+          
+
+          const autenticado =  Utils.autenticarUsuario(senha, nome)
+          
+          if (autenticado) {
+            const tokenJWT = Utils.gerarJWT({ nomeUsuario: usuario })
+
+            
+            this.socket.emit('autenticado_sucesso', tokenJWT)
+          }else {
+            this.socket.emit('autenticado_erro')
+          }   
+        
+        } else {
+          this.socket.emit('usuario_inexistente')
+        }
+          
+          
+        }
+      )
+        
     }
 }
 

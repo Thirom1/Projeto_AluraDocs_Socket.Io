@@ -1,6 +1,18 @@
+import UtilsFront from "./utils/UtilsFront.js"
 import { inserirLinkDocumento, removerLinkDocumento } from "./index.js";
 
-const socket = io();
+
+const socket = io('/usuarios', {
+  auth: {
+    token: UtilsFront.obterCookie('tokenJWT')
+  }
+});
+
+
+socket.on("connect_error", (erro) => {
+  alert(erro);
+  window.location.href = "/login/index.html";
+  })
 
 socket.emit("obter_documentos", (documentos) => {
   documentos.forEach((documento) => {
